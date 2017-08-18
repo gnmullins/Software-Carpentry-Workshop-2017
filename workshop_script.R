@@ -184,3 +184,8 @@ species_counts <- surveys_complete %>%
 #keep most common species
 surveys_com_spp <- surveys_complete %>% 
   filter(species_id %in% species_counts$species_id)
+
+#save data
+write.csv(surveys_com_spp, file="data_output/surveys_complete.csv",
+          row.names=FALSE)
+
