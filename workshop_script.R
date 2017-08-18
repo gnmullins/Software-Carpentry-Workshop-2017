@@ -58,6 +58,8 @@ summary(surveys$month == 1 | surveys$month == 2)
 summary(as.factor(surveys$month))
 summary(as.factor(surveys$month == 1 | surveys$month == 2))
 
+
+
 ## Day 2 ----
 ## Random ----
 rodent_hindfoot <- surveys[surveys$taxa == "Rodent",
@@ -66,4 +68,16 @@ rodent_weight <- surveys[surveys$taxa == "Rodent",
                          "weight"]
 plot(rodent_hindfoot, rodent_weight)
 
-##  ----
+## Get Tidyverse ----
+#install.packages("tidyverse")
+library("tidyverse", lib.loc="~/R/win-library/3.4") #load tidyverse into R
+
+##Working with dplyr ----
+select(surveys, plot_id, species_id, weight) #selecting columns
+filter(surveys, year == 1995) #filter by year
+
+#Pipes %>% ----
+#take survey, put into filter, take output of that, and put through select
+Surveys_1995 <- surveys %>%
+  filter(year == 1995) %>% 
+  select(year, plot_id, species_id, weight)
