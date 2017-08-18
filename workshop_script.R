@@ -123,13 +123,36 @@ surveys %>%
 
 ##Challenge 2 ---- 
 #How many individuals were caught in each plot_type surveyed? 
-#Use group_by() and summarize() to find the mean, min, and max hindfoot length
-#for each species (using species_id). What was the heaviest animal measured in
-#each year? Return the columns year, genus, species_id, and weight. You saw
-#above how to count the number of individuals of each sex using a combination of
-#group_by() and tally(). How could you get the same result using group_by() and
-#summarize()? Hint: see ?n.
 
 surveys %>% 
   group_by(plot_type) %>% 
   tally
+
+#Use group_by() and summarize() to find the mean, min, and max hindfoot length for each species (using species_id). 
+
+surveys %>% 
+  filter(!is.na(hindfoot_length)) %>% 
+  group_by(species_id) %>% 
+  summarize(mean_hindfoot_length = mean(hindfoot_length),
+            min_hindfoot_length = min(hindfoot_length),
+            max_hindfoot_length = max(hindfoot_length))
+
+#What was the heaviest animal measured in each year? 
+#Return the columns year, genus, species_id, and weight. Hint: does not use summarize
+
+heavy_animals <- surveys %>% 
+  filter(!is.na(weight)) %>% 
+  group_by(year) %>% 
+  filter(weight == max(weight)) %>% 
+  select(year, genus, species_id, weight) %>% 
+  arrange(year)
+
+#You saw above how to count the number of individuals of each sex using a combination of
+#group_by() and tally(). How could you get the same result using group_by() and
+#summarize()? Hint: see ?n.
+
+surveys %>% 
+  group_by(sex) %>% 
+  summarize(n())
+
+##  ----
