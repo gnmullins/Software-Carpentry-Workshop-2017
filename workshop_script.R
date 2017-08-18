@@ -89,7 +89,7 @@ surveys %>%
          weight_kg2 = weight_kg*2) %>% 
   head
 
-##Challenge ---- 
+##Challenge 1 ---- 
 #Create a new data frame from the surveys data that meets the
 #following criteria: contains only the species_id column and a new column called
 #hindfoot_half containing values that are half the hindfoot_length values. In
@@ -108,4 +108,28 @@ survey_half2 <- surveys %>%
   select(species_id, hindfoot_half)
 summary(survey_half2)
 
-##  ----
+## group_by and summarize ----
+#group_by does it in order specified
+surveys %>% 
+  filter(!is.na(weight),
+         sex == "F" | sex == "M") %>% 
+  group_by(sex, species_id) %>% 
+  summarize(mean_weight = mean(weight),
+            med_weight = median(weight))
+surveys %>% 
+  group_by(sex) %>% 
+  tally
+
+
+##Challenge 2 ---- 
+#How many individuals were caught in each plot_type surveyed? 
+#Use group_by() and summarize() to find the mean, min, and max hindfoot length
+#for each species (using species_id). What was the heaviest animal measured in
+#each year? Return the columns year, genus, species_id, and weight. You saw
+#above how to count the number of individuals of each sex using a combination of
+#group_by() and tally(). How could you get the same result using group_by() and
+#summarize()? Hint: see ?n.
+
+surveys %>% 
+  group_by(plot_type) %>% 
+  tally
