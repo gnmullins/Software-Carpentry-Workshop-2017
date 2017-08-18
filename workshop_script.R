@@ -147,6 +147,12 @@ heavy_animals <- surveys %>%
   select(year, genus, species_id, weight) %>% 
   arrange(year)
 
+heavy_animals2 <- surveys %>% 
+  select(year, genus, species_id, weight) %>% 
+  group_by(year) %>% 
+  top_n(1, weight) %>% 
+  arran(year)
+
 #You saw above how to count the number of individuals of each sex using a combination of
 #group_by() and tally(). How could you get the same result using group_by() and
 #summarize()? Hint: see ?n.
@@ -155,4 +161,26 @@ surveys %>%
   group_by(sex) %>% 
   summarize(n())
 
-##  ----
+## Exporting data ----
+#clean
+surveys_complete <- surveys %>% 
+  filter(species_id != "") %>% #remove missing species
+  filter(!is.na(weight)) %>% #remove weight NAs
+  filter(!is.na(hindfoot_length)) %>% #remove hindfoot_length NAs
+  filter(sex != "") #remove blank sex
+
+surveys_complete <- surveys %>% 
+  filter(species_id != "",
+         sex != "",
+         !is.na(weight),
+         !is.na(hindfoot_length))
+
+#extract common species_id
+species_counts <- surveys_complete %>% 
+  group_by(species_id) %>% 
+  tally() %>% 
+  filter(n>= 50)
+
+#keep most common species
+surveys_com_spp <- surveys_complete %>% 
+  filter(species_id %in% species_counts$species_id)
