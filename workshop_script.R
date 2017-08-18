@@ -100,5 +100,12 @@ survey_half <- surveys %>%
   mutate(hindfoot_half = hindfoot_length/2) %>% 
   filter(hindfoot_half <30) %>% 
   select(species_id, hindfoot_half)
+summary(survey_half)
+
+survey_half2 <- surveys %>% 
+  mutate(hindfoot_half = hindfoot_length/2) %>% 
+  filter(!is.na(hindfoot_half) & hindfoot_half <30) %>% 
+  select(species_id, hindfoot_half)
+summary(survey_half2)
 
 ##  ----
