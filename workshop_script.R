@@ -279,4 +279,4 @@ my_plot <- ggplot(data=average_weight, aes(x=year, y=mean_weight,
   labs(x="Year",
        y="Av. Weight(g)")
 
-ggsave("my_plot", plot = my_plot, device="png")
+ggsave("my_plot.png", plot = my_plot, device="png")
