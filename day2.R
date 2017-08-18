@@ -1,6 +1,9 @@
 ## script for the data carpentry workshop 2017
 ## Genevieve Mullins gmullins@ucmerced.edu
+## August 17-18, 2017
+## Git -- gnmullins
 
+## Day 1 ----
 ## download data ----
 # download.file("https://ndownloader.figshare.com/files/2292169",
 #               "data/portal_data_joined.csv")
@@ -55,4 +58,5 @@ summary(surveys$month == 1 | surveys$month == 2)
 summary(as.factor(surveys$month))
 summary(as.factor(surveys$month == 1 | surveys$month == 2))
 
-## ----
+## Day 2 ----
+##  ----
