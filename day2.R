@@ -59,4 +59,11 @@ summary(as.factor(surveys$month))
 summary(as.factor(surveys$month == 1 | surveys$month == 2))
 
 ## Day 2 ----
-##  ----
+## Random ----
+rodent_hindfoot <- surveys[surveys$taxa == "Rodent",
+                           "hindfoot_length"]
+rodent_weight <- surveys[surveys$taxa == "Rodent",
+                         "weight"]
+plot(rodent_hindfoot, rodent_weight)
+
+## ----
