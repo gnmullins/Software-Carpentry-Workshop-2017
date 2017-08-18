@@ -163,29 +163,105 @@ surveys %>%
 
 ## Exporting data ----
 #clean
-surveys_complete <- surveys %>% 
+surveys_clean <- surveys %>% 
   filter(species_id != "") %>% #remove missing species
   filter(!is.na(weight)) %>% #remove weight NAs
   filter(!is.na(hindfoot_length)) %>% #remove hindfoot_length NAs
   filter(sex != "") #remove blank sex
 
-surveys_complete <- surveys %>% 
+surveys_clean <- surveys %>% 
   filter(species_id != "",
          sex != "",
          !is.na(weight),
          !is.na(hindfoot_length))
 
 #extract common species_id
-species_counts <- surveys_complete %>% 
+species_counts <- surveys_clean %>% 
   group_by(species_id) %>% 
   tally() %>% 
   filter(n>= 50)
 
 #keep most common species
-surveys_com_spp <- surveys_complete %>% 
+surveys_complete <- surveys_clean %>% 
   filter(species_id %in% species_counts$species_id)
 
 #save data
-write.csv(surveys_com_spp, file="data_output/surveys_complete.csv",
+write.csv(surveys_complete, file="data_output/surveys_complete.csv",
           row.names=FALSE)
 
+## Data visualization ----
+
+#load data
+surveys_complete <- read.csv("data_output/surveys_complete.csv")
+
+#ggplot2 scatter
+
+ggplot(data=surveys_complete, aes(x=weight, y=hindfoot_length)) +
+  geom_point(alpha = 0.06, aes(color= species_id))
+
+##Challenge 3 ---- 
+#Use what you just learned to create a scatter plot of weight
+#over species_id with the plot types showing in different colors. 
+#Is this a good way to show this type of data? NO
+
+ggplot(data=surveys_complete, aes(x=species_id, y=weight)) +
+  geom_point(alpha = 0.06, aes(color= plot_type)) 
+
+## More plots ----
+
+#boxplot
+ggplot(data=surveys_complete, aes(x=species_id, y=weight)) +
+  geom_boxplot()
+
+ggplot(data=surveys_complete, aes(x=species_id, y=weight)) +
+  geom_boxplot(aes(color=plot_type)) +
+  facet_grid(sex~.) +
+  labs(x="Species",
+       y="Weight",
+       title="Plot")
+
+ggplot(data=surveys_complete, aes(x=species_id, y=weight)) +
+  geom_boxplot(aes(color=sex)) +
+  labs(x="Species",
+       y="Weight",
+       title="Plot")
+
+##time series ----
+
+yearly_counts <- surveys_complete %>% 
+  group_by(year, species_id) %>% 
+  tally()
+
+ggplot(data=yearly_counts, aes(x=year, y=n,
+                               group=species_id,
+                               color=species_id)) +
+  geom_line() +
+  facet_wrap(~ species_id)
+
+yearly_sex_counts <- surveys_complete %>% 
+  group_by(year, species_id, sex) %>% 
+  tally()
+
+ggplot(data=yearly_sex_counts, aes(x=year, y=n,
+                                   color=sex))+
+  geom_line()+
+  facet_wrap(~species_id) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+
+##Challenge 4 ----
+#Use what you just learned to create a plot that depicts 
+#how the average weight of each species changes through the years.
+
+average_weight <- surveys_complete %>% 
+  group_by(year, species_id) %>% 
+  summarise(mean_weight = mean(weight))
+
+ggplot(data=average_weight, aes(x=year, y=mean_weight,
+                                group=species_id,
+                                color=species_id)) +
+  geom_line() +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+
+##  ----
