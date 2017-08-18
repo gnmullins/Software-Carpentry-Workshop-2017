@@ -66,4 +66,4 @@ rodent_weight <- surveys[surveys$taxa == "Rodent",
                          "weight"]
 plot(rodent_hindfoot, rodent_weight)
 
-## ----
+##  ----
