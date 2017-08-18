@@ -237,6 +237,7 @@ ggplot(data=yearly_counts, aes(x=year, y=n,
                                color=species_id)) +
   geom_line() +
   facet_wrap(~ species_id)
+#can just use color and not group, as color will group and color
 
 yearly_sex_counts <- surveys_complete %>% 
   group_by(year, species_id, sex) %>% 
@@ -258,10 +259,24 @@ average_weight <- surveys_complete %>%
   summarise(mean_weight = mean(weight))
 
 ggplot(data=average_weight, aes(x=year, y=mean_weight,
-                                group=species_id,
                                 color=species_id)) +
   geom_line() +
   theme_bw() +
-  theme(panel.grid = element_blank())
+  theme(panel.grid = element_blank(),
+        legend.position = "none") +
+  facet_wrap(~species_id) +
+  labs(x="Year",
+       y="Av. Weight(g)")
 
-##  ----
+## save plot ----
+my_plot <- ggplot(data=average_weight, aes(x=year, y=mean_weight,
+                                color=species_id)) +
+  geom_line() +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = "none") +
+  facet_wrap(~species_id) +
+  labs(x="Year",
+       y="Av. Weight(g)")
+
+ggsave("my_plot", plot = my_plot, device="png")
